@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>วินัยการทำงานรายวัน</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f5fb;--sf:#fff;--ink:#161a2e;--mu:#6a7090;--ln:#e3e6f2;--ac:#4f46e5;--ok:#13b67a;--wn:#ff8a1f;--rd:#f0364b;--hero:#2b2a8f;--sh:0 6px 24px rgba(30,35,90,.08);color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0f1b;--sf:#151a2c;--ink:#eceffa;--mu:#9099bb;--ln:#262d47;--ac:#8b85ff;--ok:#2fd596;--hero:#1c2050;--sh:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c0f1b;--sf:#151a2c;--ink:#eceffa;--mu:#9099bb;--ln:#262d47;--ac:#8b85ff;--ok:#2fd596;--hero:#1c2050;--sh:none;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans Thai','Sarabun',system-ui,sans-serif;line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:18px 16px 56px}
+h1{font-size:1.05rem;margin:0 2px 12px;font-weight:600;color:var(--mu)}
+h2{font-size:1rem;margin:26px 2px 10px}
+.hero{background:var(--hero);color:#fff;border-radius:28px;padding:22px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;box-shadow:var(--sh)}
+.ring{position:relative;width:128px;height:128px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.ring .bg{stroke:rgba(255,255,255,.16)}
+.ring .fg{stroke:#fff;stroke-dasharray:339.3;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s}
+.rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.rc b{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums}.rc span{font-size:.78rem;opacity:.8}
+.hi{flex:1;min-width:170px}
+.clock{font-size:1rem;opacity:.8;font-variant-numeric:tabular-nums}
+.cur{font-size:1.3rem;font-weight:800;line-height:1.3;margin:2px 0}
+.sub{opacity:.8;font-size:.9rem}
+.hero.warn .fg{stroke:#ffb347;animation:bl 1s infinite}
+.hero.warn .cur{color:#ffcf8a}
+.lv,.blk,.stats div,.chart{background:var(--sf);border:1px solid var(--ln);border-radius:20px;box-shadow:var(--sh)}
+.lv{padding:14px 18px;margin:14px 0}
+.lv>div:first-child{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.lv b{font-weight:800}.lv span{color:var(--mu);font-size:.85rem}
+.lb{height:10px;background:var(--ln);border-radius:10px;margin-top:8px;overflow:hidden}
+.lb i{display:block;height:100%;background:var(--ac);border-radius:10px;width:0;transition:width .6s}
+.day{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin:22px 2px 10px}
+.day b{font-size:1.05rem}.score{color:var(--ok);font-weight:600;font-size:.92rem}
+.blk{padding:14px 16px;margin-bottom:12px;border-left:6px solid var(--ln);transition:opacity .3s}
+.blk.now{border-left-color:var(--ac);box-shadow:0 0 0 2px var(--ac),var(--sh)}
+.blk.past{opacity:.72}.blk.full{border-left-color:var(--ok)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.t{font-size:.85rem;color:var(--mu);font-variant-numeric:tabular-nums}
+.pill{font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--bg);color:var(--mu);font-variant-numeric:tabular-nums}
+.now .pill{background:var(--ac);color:#fff}.full .pill{background:var(--ok);color:#fff}
+.blk.warn{border-left-color:var(--rd);animation:bl 1s infinite}
+.warn .pill{background:var(--rd);color:#fff}
+@keyframes bl{0%,100%{box-shadow:0 0 0 2px var(--rd),0 0 0 0 rgba(240,54,75,.5);opacity:1}50%{box-shadow:0 0 0 2px var(--rd),0 0 22px 6px rgba(240,54,75,.55);opacity:.82}}
+@media (prefers-reduced-motion:reduce){.blk.warn,.hero.warn .fg{animation:none}.blk.warn{box-shadow:0 0 0 3px var(--rd)}}
+.name{font-weight:600;font-size:1.05rem;margin:4px 0 6px}
+label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer;min-height:36px}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none;margin-top:2px}
+input:checked+span{text-decoration:line-through;color:var(--mu)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+button{font:inherit;background:var(--sf);border:1px solid var(--ln);color:var(--mu);border-radius:12px;padding:6px 14px;cursor:pointer;min-height:38px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1}.tabs button[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.chart{padding:14px 14px 10px}
+.bars{display:flex;gap:6px;align-items:flex-end;height:120px;overflow-x:auto}
+.bars div{flex:1;min-width:26px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:.72rem;color:var(--mu)}
+.bars i{display:block;width:100%;background:var(--ac);opacity:.55;border-radius:8px 8px 3px 3px;min-height:3px}
+.bars .cu i{opacity:1}.bars .cu{color:var(--ink);font-weight:600}
+.sum{font-size:.9rem;color:var(--mu);margin:10px 2px 0}.sum b{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stats div{padding:12px 8px;text-align:center}.stats b{display:block;font-size:1.6rem;font-weight:800;color:var(--ac)}.stats span{font-size:.78rem;color:var(--mu)}
+textarea{font:inherit;color:var(--ink);background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:12px 14px;width:100%}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);background:var(--wn);color:#1a1200;font-weight:600;padding:12px 20px;border-radius:14px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.fx{position:fixed;pointer-events:none;z-index:30;font-weight:800;line-height:1}
+.note{font-size:.85rem;color:var(--mu);margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+<h1>วินัยการทำงานรายวัน · 08:30–17:30</h1>
+<section class="hero" id="hero" aria-live="off">
+  <div class="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" id="fg" cx="60" cy="60" r="54"/></svg><div class="rc"><b id="rn">–</b><span id="ru">นาที</span></div></div>
+  <div class="hi"><div class="clock" id="clock">--:--:--</div><div class="cur" id="cur">กำลังโหลด</div><div class="sub" id="left"></div><div class="sub" id="mot" style="margin-top:6px;font-weight:600;opacity:1"></div></div>
+</section>
+<div class="lv"><div><b id="lvn"></b><span id="lvx"></span></div><div class="lb"><i id="lvb"></i></div></div>
+<div id="toast" role="status"></div>
+<div class="day"><b id="date"></b><span class="score" id="score"></span></div>
+<div id="list"></div>
+<h2>ผลคะแนน</h2>
+<div class="tabs" id="tabs"><button data-u="d" aria-pressed="true">รายวัน</button><button data-u="w" aria-pressed="false">สัปดาห์</button><button data-u="m" aria-pressed="false">เดือน</button><button data-u="y" aria-pressed="false">ปี</button></div>
+<div class="chart"><div class="bars" id="bars"></div></div>
+<p class="sum" id="sum"></p>
+<h2>สถิติ</h2>
+<div class="stats" id="stats"></div>
+<h2>บันทึกท้ายวัน</h2>
+<textarea id="nt" rows="3" placeholder="วันนี้ทำอะไรได้ดี / พรุ่งนี้ต้องปรับอะไร" aria-label="บันทึกท้ายวัน"></textarea>
+<p class="note">ติ๊กงานเมื่อทำเสร็จจริง: งานละ 10 คะแนน ครบช่วง +10 ครบทั้งวัน +50 คะแนนสะสมเป็น XP ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้ <button id="reset">ล้างของวันนี้</button></p>
+</main>
+<script>
+const B=[
+{s:'08:30',e:'09:00',n:'เคลียร์งานรอบดึก + จ่ายงาน + เช็กชื่อ',k:['เช็กชื่อคนทำงาน/ลา ใครมาบ้าง','เคลียร์งานรอบดึก','จ่ายงานให้ทีม']},
+{s:'09:00',e:'11:30',n:'Support งาน · ติดตามงาน · ประสานงาน',k:['Support งานทีม','ติดตามความคืบหน้างาน','ประสานงานหน่วยงานที่เกี่ยวข้อง']},
+{s:'11:30',e:'12:00',n:'เขียน One page (30 นาที)',k:['เขียน One page ให้จบ']},
+{s:'12:00',e:'12:30',n:'ติดตามงาน · ประสานงาน',k:['ติดตามงานที่ยังค้าง','ประสานงานก่อนพักเที่ยง']},
+{s:'12:30',e:'13:00',n:'พักเที่ยง',k:['พักจริง ห่างจากหน้าจอ']},
+{s:'13:00',e:'15:00',n:'Support งาน · ติดตามงาน · ประสานงาน',k:['Support งานทีม','ติดตามความคืบหน้างาน','ประสานงานหน่วยงานที่เกี่ยวข้อง']},
+{s:'15:00',e:'16:30',n:'เขียน IGIS (2 ชั่วโมง)',k:['ปิดแจ้งเตือน โฟกัสต่อเนื่อง','ได้ผลงานตามเป้าที่ตั้งไว้']},
+{s:'16:30',e:'17:30',n:'ติดตามงาน + สรุปวัน',k:['เช็กสถานะงานทั้งหมด','จดแผนพรุ่งนี้']}];
+const m=t=>{const[a,b]=t.split(':');return +a*60+ +b};
+const key=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+const p2=n=>String(n).padStart(2,'0');
+const total=B.reduce((n,b)=>n+b.k.length,0);
+const PT=10,BB=10,DB=50,MAX=total*PT+B.length*BB+DB,WARN=300;
+let S={},N={},PU='d';
+try{S=JSON.parse(localStorage.getItem('wd')||'{}')}catch(e){}
+try{N=JSON.parse(localStorage.getItem('wdn')||'{}')}catch(e){}
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const $=id=>document.getElementById(id);
+const cnt=k=>Object.values(S[k]||{}).filter(Boolean).length;
+function pts(k){const d=S[k]||{};let p=0,all=true;B.forEach((b,i)=>{let f=true;b.k.forEach((_,j)=>{if(d[i+'-'+j])p+=PT;else f=false});if(f)p+=BB;else all=false});if(all)p+=DB;return p}
+const xp=()=>Object.keys(S).reduce((n,k)=>n+pts(k),0);
+const lv=x=>Math.floor(Math.sqrt(x/50))+1;
+const NM=['มือใหม่','เริ่มมีวินัย','คงเส้นคงวา','ตรงเวลา','มืออาชีพ','หัวหน้าทีมตัวจริง','ปรมาจารย์เวลา'];
+const lname=l=>NM[Math.min(l-1,NM.length-1)];
+const fmt=s=>{s=Math.ceil(s/60);const h=Math.floor(s/60),n=s%60;return h?h+' ชม.'+(n?' '+n+' นาที':''):n+' นาที'};
+const ms=s=>Math.floor(s/60)+':'+p2(s%60);
+const EM=['🧹','🤝','✍️','📞','🍜','🤝','💻','📋'];
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function fx(t,x,y,css,kf,dur){const e=document.createElement('div');e.className='fx';e.textContent=t;e.style.cssText='left:'+x+'px;top:'+y+'px;'+css;document.body.appendChild(e);e.animate(kf,{duration:dur,easing:'ease-out'}).onfinish=()=>e.remove()}
+function pop(r,t){if(RM)return;fx(t,r.left,r.top,'color:var(--ok);font-size:1.3rem',[{transform:'translateY(0)',opacity:1},{transform:'translateY(-48px)',opacity:0}],800)}
+function confetti(n){if(RM)return;const c=['#4f46e5','#13b67a','#ff8a1f','#f0364b','#f5c518'],w=innerWidth;for(let i=0;i<n;i++){const dx=(Math.random()-.5)*w*.8,dy=innerHeight*(.5+Math.random()*.5);fx('■',w/2,innerHeight*.35,'color:'+c[i%5]+';font-size:'+(8+Math.random()*10)+'px',[{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) rotate('+Math.random()*720+'deg)',opacity:0}],1200+Math.random()*900)}}
+function lvl(){const x=xp(),l=lv(x),lo=50*(l-1)*(l-1),hi=50*l*l;
+ $('lvn').textContent='เลเวล '+l+' · '+lname(l);
+ $('lvx').textContent=x+' / '+hi+' XP (อีก '+(hi-x)+' ขึ้นเลเวล)';
+ $('lvb').style.width=Math.round((x-lo)/(hi-lo)*100)+'%'}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),3500)}
+const monday=d=>{const x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);return x};
+const bk=(u,d)=>u==='d'?key(d):u==='w'?key(monday(d)):u==='m'?d.getFullYear()+'-'+(d.getMonth()+1):''+d.getFullYear();
+function periods(u){const n={d:7,w:8,m:12,y:3}[u],out=[],now=new Date();
+ for(let i=n-1;i>=0;i--){const d=new Date(now);
+  if(u==='d')d.setDate(d.getDate()-i);else if(u==='w')d.setDate(d.getDate()-7*i);else if(u==='m'){d.setDate(1);d.setMonth(d.getMonth()-i)}else d.setFullYear(d.getFullYear()-i);
+  const w=monday(d);
+  const l=u==='d'?d.toLocaleDateString('th-TH',{weekday:'short'}):u==='w'?w.getDate()+'/'+(w.getMonth()+1):u==='m'?d.toLocaleDateString('th-TH',{month:'short'}):d.toLocaleDateString('th-TH',{year:'numeric'});
+  out.push({b:bk(u,d),l,p:0,a:0,c:i===0})}
+ Object.keys(S).forEach(k=>{const[y,mo,dd]=k.split('-').map(Number),o=out.find(x=>x.b===bk(u,new Date(y,mo-1,dd)));if(o){const p=pts(k);o.p+=p;if(p>0)o.a++}});
+ return out}
+function summary(){const r=periods(PU),mx=Math.max(1,...r.map(x=>x.p)),c=r[r.length-1];
+ $('bars').innerHTML=r.map(x=>`<div class="${x.c?'cu':''}"><span>${x.p}</span><i style="height:${Math.max(x.p/mx*78,3)}px"></i><span>${x.l}</span></div>`).join('');
+ const nm={d:'วันนี้',w:'สัปดาห์นี้',m:'เดือนนี้',y:'ปีนี้'}[PU];
+ $('sum').innerHTML=nm+' <b>'+c.p+'</b> คะแนน · ทำงาน '+c.a+' วัน'+(c.a?' · เฉลี่ย <b>'+Math.round(c.p/c.a)+'</b>/วัน':'')}
+function stats(){let st=0;for(let n=0;n<365;n++){const d=new Date();d.setDate(d.getDate()-n);if(pts(key(d))>=MAX*.7)st++;else if(n)break}
+ const v=Object.keys(S).map(pts);
+ $('stats').innerHTML=[['วันต่อเนื่อง (≥70%)',st],['คะแนนสูงสุด/วัน',Math.max(0,...v)],['จำนวนวันที่ใช้',v.filter(x=>x>0).length]].map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')}
+function render(){
+ const now=new Date(),d=S[key(now)]||{};
+ $('date').textContent=now.toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'});
+ $('list').innerHTML=B.map((b,i)=>`<section class="blk" id="b${i}"><div class="top"><span class="t">${b.s}–${b.e}</span><span class="pill" data-p="${i}"></span></div><p class="name">${EM[i]} ${b.n}</p>`+
+  b.k.map((t,j)=>`<label><input type="checkbox" data-k="${i}-${j}" ${d[i+'-'+j]?'checked':''}><span>${t}</span></label>`).join('')+`</section>`).join('');
+ tick();summary();lvl();stats();
+}
+function tick(){
+ const now=new Date(),ns=now.getHours()*3600+now.getMinutes()*60+now.getSeconds(),k=key(now),d=S[k]||{};
+ $('clock').textContent=p2(now.getHours())+':'+p2(now.getMinutes())+':'+p2(now.getSeconds());
+ let cur=-1,warn=false,rem=0;
+ B.forEach((b,i)=>{const s0=m(b.s)*60,e0=m(b.e)*60,el=document.querySelector('[data-p="'+i+'"]'),c=$('b'+i);if(!el)return;
+  const full=b.k.every((_,j)=>d[i+'-'+j]),on=ns>=s0&&ns<e0;let t,w=false;
+  if(on){cur=i;rem=e0-ns;t='เหลือ '+(rem<=WARN?ms(rem):fmt(rem));w=rem<=WARN&&!full;warn=rem<=WARN}
+  else t=ns<s0?'เริ่มในอีก '+fmt(s0-ns):'จบแล้ว';
+  if(full)t='ทำครบแล้ว';
+  el.textContent=t;c.classList.toggle('warn',w);c.classList.toggle('now',on);c.classList.toggle('past',ns>=e0);c.classList.toggle('full',full)});
+ const fg=$('fg'),cu=$('cur'),l=$('left');
+ if(cur>=0){const b=B[cur],tot=(m(b.e)-m(b.s))*60;
+  cu.textContent=(warn?'⏰':EM[cur])+' '+b.n;l.textContent='ถัดไป: '+(B[cur+1]?B[cur+1].n:'เลิกงาน');
+  fg.style.strokeDashoffset=339.3*(1-rem/tot)*-1+339.3-339.3;
+  fg.style.strokeDashoffset=339.3*(1-rem/tot);
+  $('rn').textContent=rem<=WARN?ms(rem):Math.ceil(rem/60);$('ru').textContent=rem<=WARN?'ใกล้หมดเวลา':'นาที'}
+ else{const pre=ns<m('08:30')*60;cu.textContent=pre?'☕ ยังไม่ถึงเวลาเริ่มงาน':(cnt(k)===total?'🏆 ':'🌙 ')+'เลิกงานแล้ว';
+  l.textContent=pre?'เริ่มงาน 08:30 อีก '+fmt(m('08:30')*60-ns):'ทบทวนว่าวันนี้ทำครบตามแผนไหม';
+  fg.style.strokeDashoffset=339.3;$('rn').textContent='–';$('ru').textContent=''}
+ $('hero').classList.toggle('warn',warn);
+ {const c=cnt(k),r=c/total;$('mot').textContent=r>=1?'ครบทั้งวัน! วันนี้คือแชมป์ 🎉':r>=.5?'เกินครึ่งแล้ว สู้ต่ออีกนิด เหลือ '+(total-c)+' งาน':r>0?'ออกสตาร์ตแล้ว ทำต่อทีละข้อ':'เริ่มติ๊กข้อแรก แล้วแต้มจะมาเอง'}
+ $('score').textContent='วันนี้ '+pts(k)+'/'+MAX+' คะแนน · เสร็จ '+cnt(k)+'/'+total+' งาน';
+}
+$('list').addEventListener('change',e=>{
+ const k=key(new Date()),before=lv(xp());
+ const rc=e.target.getBoundingClientRect(),bi=+e.target.dataset.k.split('-')[0],wasB=B[bi].k.every((_,j)=>(S[k]||{})[bi+'-'+j]),wasD=pts(k)>=MAX;
+ S[k]=S[k]||{};S[k][e.target.dataset.k]=e.target.checked;sv('wd',S);render();
+ if(e.target.checked){pop(rc,'+'+PT);try{navigator.vibrate&&navigator.vibrate(15)}catch(_){}}
+ const isB=B[bi].k.every((_,j)=>S[k][bi+'-'+j]),isD=pts(k)>=MAX;
+ if(isD&&!wasD){confetti(90);toast('ครบทั้งวัน! โบนัส +'+DB)}else if(isB&&!wasB){confetti(35);toast('ครบช่วง! โบนัส +'+BB)}
+ const a=lv(xp());if(a>before){confetti(120);toast('เลเวลอัป! ตอนนี้เลเวล '+a+' · '+lname(a))}});
+$('tabs').addEventListener('click',e=>{const u=e.target.dataset.u;if(!u)return;PU=u;
+ document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.u===u));summary()});
+$('reset').onclick=()=>{S[key(new Date())]={};sv('wd',S);render()};
+const nt=$('nt');nt.value=N[key(new Date())]||'';
+nt.addEventListener('input',()=>{N[key(new Date())]=nt.value;sv('wdn',N)});
+render();setInterval(tick,1000);setInterval(render,60000);
+</script>
+</body>
+</html>
